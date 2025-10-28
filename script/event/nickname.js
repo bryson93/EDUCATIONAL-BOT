@@ -2,7 +2,7 @@ let config = {};
 try {
     config = require("../config.json");
 } catch (e) {
-    config.botName = "❖━═ ᴀᴜᴛᴏᴍᴀᴛᴇᴅ ʙᴏᴛ ═━❖";
+    config.botName = "[ + ] 𝘾𝙃𝘼𝙏𝘽𝙊𝙏";
 }
 
 module.exports.config = {
@@ -21,7 +21,7 @@ module.exports.config = {
 module.exports.handleEvent = async function ({ api, event }) {
     try {
         const botID = api.getCurrentUserID();
-        const botName = config.botName || "❖━═ ᴀᴜᴛᴏᴍᴀᴛᴇᴅ ʙᴏᴛ ═━❖";
+        const botName = config.botName || "[ + ] 𝘾𝙃𝘼𝙏𝘽𝙊𝙏";
 
         // When bot is added to group
         if (
