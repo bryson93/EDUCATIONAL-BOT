@@ -4,9 +4,7 @@ module.exports = async ({ api }) => {
   const configCustom = {
     autosetbio: {
       status: true,
-      bio: `❐❒ AUTOBOT ❒❐
-▣ site owner : bryson
-▣ autobot site: https://automated-chatbot-61a3.onrender.com/`
+      bio: `Greetings, user! What can I do for you?`
     },
     greetings: {
       status: true,
