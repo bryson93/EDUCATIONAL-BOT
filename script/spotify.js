@@ -221,12 +221,12 @@ module.exports.run = async function ({ api, event, args }) {
     const now = new Date();
     const phTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Manila" }));
     
+    // Format time as "9:53" (no seconds, no AM/PM)
     const time = phTime.toLocaleTimeString('en-US', { 
       timeZone: "Asia/Manila",
-      hour12: true, 
-      hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit'
+      hour12: false, 
+      hour: 'numeric', 
+      minute: '2-digit'
     });
     
     const date = phTime.toLocaleDateString('en-US', {
@@ -236,8 +236,8 @@ module.exports.run = async function ({ api, event, args }) {
       day: 'numeric'
     });
 
-    // Updated message format with song request name
-    await api.sendMessage(`🎵 𝗵𝗲𝗿𝗲'𝘀 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁 𝘀𝗼𝗻𝗴 𝗲𝗻𝗷𝗼𝘆!\n\n📝 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝘀𝗼𝗻𝗴 𝗯𝘆: ${userName}\n⏰ 𝘁𝗶𝗺𝗲: ${time} (Philippines)\n🎶 𝘀𝗼𝗻𝗴 𝗿𝗲𝗾𝘂𝗲𝘀𝘁: ${userRequest}\n📅 𝗱𝗮𝘁𝗲: ${date}`, threadID);
+    // Updated message format with clean time format
+    await api.sendMessage(`🎵 𝗵𝗲𝗿𝗲'𝘀 𝘆𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁 𝘀𝗼𝗻𝗴 𝗲𝗻𝗷𝗼𝘆!\n\n📝 𝗿𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝘀𝗼𝗻𝗴 𝗯𝘆: ${userName}\n⏰ 𝘁𝗶𝗺𝗲: ${time}\n🎶 𝘀𝗼𝗻𝗴 𝗿𝗲𝗾𝘂𝗲𝘀𝘁: ${userRequest}\n📅 𝗱𝗮𝘁𝗲: ${date}`, threadID);
 
     // Download audio from YouTube
     console.log("📥 Downloading audio from YouTube...");
@@ -302,7 +302,7 @@ module.exports.run = async function ({ api, event, args }) {
     } else if (error.code === 'ETIMEDOUT') {
       errorMessage = "❌ 𝚁𝚎𝚚𝚞𝚎𝚜𝚝 𝚝𝚒𝚖𝚎𝚍 𝚘𝚞𝚝. 𝙿𝚕𝚎𝚊𝚜𝚎 𝚝𝚛𝚢 𝚊𝚐𝚊𝚒𝚗.";
     } else if (error.response?.status === 404) {
-      errorMessage = "❌ 𝚂𝚘𝚗𝚐 𝚗𝚘𝚝 𝚏𝚘𝚞𝚗𝚍. 𝙿𝚕𝚎𝚊𝚜𝚎 𝚝𝚛𝚢 𝚊 𝚍𝚒𝚏𝚏𝚎𝚛𝚎𝚗𝚝 𝚜𝚎𝚊𝚛𝚌𝚑 𝚝𝚎𝚛𝚖.";
+      errorMessage = "❌ 𝚂𝚘𝚗𝚐 𝚗𝚘𝚝 𝚏𝚘𝚞𝚗𝚍. 𝙿𝚕𝚎𝚊𝚜𝚎 𝚝𝚛𝚢 𝚊 𝚍𝚒𝚏𝚓𝗲𝗿𝗲𝗻𝘁 𝚜𝚎𝚊𝚛𝚌𝚑 𝚝𝚎𝚿𝗺.";
     } else if (error.response?.data) {
       errorMessage = `❌ 𝙰𝙿𝙸 𝙴𝚛𝚛𝚘𝚛: ${error.response.data.message || JSON.stringify(error.response.data)}`;
     }
