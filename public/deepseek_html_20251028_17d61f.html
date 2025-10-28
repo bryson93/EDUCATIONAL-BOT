@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bry's Automated Bot</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://i.imgur.com/GSU0fOb.jpeg" type="image/jpeg" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <audio id="backgroundMusic" autoplay loop style="display: none;"></audio>
+
+    <div class="app-container">
+      <div class="header-section">
+        <div class="profile-card">
+          <div class="profile-banner">
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZjRnaHlmZWhzZWxjbnh1NnZyM2pxaHdkY24wZ3Q2Nmtkem04MGtyYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/EDRdYt04QK2d2/giphy.gif" alt="Profile Banner">
+          </div>
+          <div class="profile-content">
+            <div class="avatar-container">
+              <img src="https://i.imgur.com/GSU0fOb.jpeg" alt="Bry's Avatar">
+              <div class="status-indicator"></div>
+            </div>
+            <div class="profile-details">
+              <h1 class="profile-name">
+                Bry
+                <span class="verified-badge">
+                  <i class="fas fa-check-circle"></i>
+                </span>
+              </h1>
+              <p class="profile-description">
+                🤖 Advanced Facebook Automation Bot | Secure & Efficient | Multi-Command Support
+                <br>
+                ⚡ Auto-Reply | Message Handling | Event Tracking | Custom Commands
+                <br>
+                🔒 Safe & Reliable | Regular Updates | 24/7 Operation
+              </p>
+              <div class="action-buttons">
+                <a class="action-btn primary" href="https://www.facebook.com/profile.php?id=61578130127315">
+                  <i class="fab fa-facebook"></i> View Profile
+                </a>
+                <a class="action-btn secondary" href="https://bryson-profile-page-v2.netlify.app/">
+                  <i class="fas fa-info-circle"></i> More Info
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="content-section">
+          <h2 class="section-title">
+            <i class="fas fa-key"></i> Facebook Appstate
+          </h2>
+          <form id="json-form" onsubmit="submitForm(event)">
+            <textarea id="json-data" placeholder="Paste your appstate JSON here"></textarea>
+          </form>
+        </div>
+
+        <div class="commands-grid">
+          <div class="command-panel">
+            <div class="panel-header">
+              <i class="fas fa-terminal"></i>
+              <h3>Select Your Commands</h3>
+            </div>
+            <div id="listOfCommands" class="commands-list"></div>
+            <div class="panel-actions">
+              <button class="panel-btn" onclick="selectAllCommands()">
+                <i class="fas fa-check-double"></i> Select All
+              </button>
+              <button class="panel-btn" onclick="deselectAllCommands()">
+                <i class="fas fa-times"></i> Deselect All
+              </button>
+            </div>
+          </div>
+
+          <div class="command-panel">
+            <div class="panel-header">
+              <i class="fas fa-calendar-alt"></i>
+              <h3>Select Event Commands</h3>
+            </div>
+            <div id="listOfCommandsEvent" class="commands-list"></div>
+            <div class="panel-actions">
+              <button class="panel-btn" onclick="selectAllEvents()">
+                <i class="fas fa-check-double"></i> Select All
+              </button>
+              <button class="panel-btn" onclick="deselectAllEvents()">
+                <i class="fas fa-times"></i> Deselect All
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="setting-group">
+            <h2 class="section-title">
+              <i class="fas fa-hashtag"></i> Enter prefix (optional)
+            </h2>
+            <input type="text" id="inputOfPrefix" />
+          </div>
+
+          <div class="setting-group">
+            <h2 class="section-title">
+              <i class="fas fa-user-shield"></i> Enter UID (important)
+            </h2>
+            <input type="text" id="inputOfAdmin" />
+          </div>
+        </div>
+
+        <div class="terms-section">
+          <label class="terms-checkbox">
+            <input type="checkbox" id="agreeCheckbox" /> 
+            <span>I have read and agree to the Terms and Conditions. I understand the risks involved with using automated bots.</span>
+          </label>
+        </div>
+
+        <div class="submit-section">
+          <button class="submit-button" onclick="State()" disabled id="submitButton">
+            <i class="fas fa-rocket"></i> Activate Bot
+          </button>
+        </div>
+      </div>
+
+      <div id="result" class="result-section" style="display: none;"></div>
+
+      <footer class="app-footer">
+        <div class="footer-info">
+          <p><i class="fas fa-clock"></i> Time: <span id="time"></span></p>
+          <p><i class="fas fa-signal"></i> Ping: <span id="ping"></span></p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      
+      const songs = [
+        'music/pasensya-kana.mp3',
+        'music/when-i-was-your-mam.mp3',
+        'music/control.mp3',
+        'music/goodbye.mp3',
+        'music/one-that-got-away.mp3',
+        'music/thousands-years.mp3'
+      ];
+      
+      let currentSongIndex = -1;
+      
+      function getRandomSong() {
+        let newIndex;
+        do {
+          newIndex = Math.floor(Math.random() * songs.length);
+        } while (newIndex === currentSongIndex && songs.length > 1);
+        
+        currentSongIndex = newIndex;
+        return songs[currentSongIndex];
+      }
+      
+      function playRandomSong() {
+        const randomSong = getRandomSong();
+        backgroundMusic.src = randomSong;
+        playMusic();
+      }
+      
+      function playMusic() {
+        backgroundMusic.play().catch(error => {
+          console.log('Autoplay prevented:', error);
+        });
+      }
+      
+      window.onload = function() {
+        playRandomSong();
+        
+        backgroundMusic.addEventListener('ended', function() {
+          playRandomSong();
+        });
+        
+        Swal.fire({
+          title: `<div class="welcome-title">🚀 Bry's Automated Bot</div>`,
+          html: `
+            <div class="welcome-subtitle">Welcome to the most advanced Facebook automation platform!</div>
+            <div class="welcome-features">
+              <ul>
+                <li>✅ Secure AppState authentication</li>
+                <li>✅ Multiple command support</li>
+                <li>✅ Real-time event handling</li>
+                <li>✅ Custom prefix configuration</li>
+                <li>✅ 24/7 reliable operation</li>
+              </ul>
+            </div>
+            <div class="welcome-note">
+              🎵 Random music mode enabled
+            </div>
+          `,
+          width: 600,
+          padding: '20px',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          color: 'white',
+          showCloseButton: true,
+          showConfirmButton: true,
+          confirmButtonText: `<i class="fas fa-play-circle"></i> Get Started`,
+          confirmButtonColor: '#6366f1'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            playMusic();
+          }
+        });
+
+        document.addEventListener('click', function() {
+          playMusic();
+        }, { once: true });
+      };
+    </script>
+  </body>
+</html>
