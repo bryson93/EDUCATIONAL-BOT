@@ -3,8 +3,8 @@ const axios = require('axios');
 module.exports.config = {
   name: "dalle",
   version: "1.0.0",
-  credits: "Vern",
-  description: "Generates an AI image using DALL·E from a given prompt.",
+  credits: "bryson",
+  description: "Generates 4 AI images using DALL·E from a given prompt.",
   hasPrefix: false,
   cooldown: 5,
   aliases: ["dalleimage", "genimage"],
@@ -13,20 +13,20 @@ module.exports.config = {
 module.exports.run = async function ({ api, event, args }) {
   if (!args || args.length === 0) {
     return api.sendMessage(
-      "Please provide a prompt to generate a DALL·E image.\n\nExample: dalle dog wearing sunglasses",
+      "Please provide a prompt to generate DALL·E images.\n\nExample: dalle dog wearing sunglasses",
       event.threadID,
       event.messageID
     );
   }
 
   const prompt = args.join(' ');
-  const imageUrl = `https://markdevs-last-api-s7d0.onrender.com/api/dalle?prompt=${encodeURIComponent(prompt)}`;
+  const imageUrl = `https://api-library-kohi.onrender.com/api/opendalle?prompt=${encodeURIComponent(prompt)}`;
 
   try {
     const imageStream = await axios.get(imageUrl, { responseType: 'stream' });
 
     return api.sendMessage({
-      body: `Here's your image for: "${prompt}"`,
+      body: `Here are your 4 images for: "${prompt}"`,
       attachment: imageStream.data
     }, event.threadID);
   } catch (error) {
